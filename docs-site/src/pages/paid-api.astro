@@ -1,0 +1,78 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<DocsLayout
+	title="Paid scan API"
+	eyebrow="[ 10 · x402 ]"
+	description="HTTP OSINT Scanner with per-scan payment via x402 on Stellar (Local402), priced in Chilean pesos."
+>
+	<pre><code>GET /scan/&lt;CONTRACT_ID&gt;
+  → 402 Payment Required   price in CLP → USDC via Reflector
+  → 200 OK                 paid: functions, params, UDTs (scan block shape)</code></pre>
+
+	<Callout type="warn" title="Scanner only">
+		<p>
+			Chaos Monkey broadcasts transactions — it stays a local, explicit action and is
+			<strong>never</strong> exposed over HTTP.
+		</p>
+	</Callout>
+
+	<h2>Run the server</h2>
+	<pre><code>cp .env.example .env
+npm run build
+node --env-file=.env dist/server.js
+# or: npm run serve / kuyfi-server</code></pre>
+
+	<h2>Environment</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Variable</th>
+				<th>Default</th>
+				<th>Notes</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>PAY_TO</code></td>
+				<td>required</td>
+				<td>Public <code>G…</code> address. Never a secret key.</td>
+			</tr>
+			<tr>
+				<td><code>PRICE</code></td>
+				<td><code>500 CLP</code></td>
+				<td>Any Reflector currency, e.g. <code>0.50 USD</code>, <code>0.02 UF</code></td>
+			</tr>
+			<tr>
+				<td><code>NETWORK</code></td>
+				<td><code>stellar:testnet</code></td>
+				<td>Where payment settles. Scans always read Soroban Testnet.</td>
+			</tr>
+			<tr>
+				<td><code>FACILITATOR_URL</code></td>
+				<td>Local402 public facilitator</td>
+				<td>Mainnet facilitator allowlists <code>PAY_TO</code></td>
+			</tr>
+			<tr>
+				<td><code>PORT</code></td>
+				<td><code>4021</code></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Client example</h2>
+	<pre><code>npx -y local402-client quote http://localhost:4021/scan/&lt;CONTRACT_ID&gt;</code></pre>
+
+	<h2>Failure / settlement rules</h2>
+	<ul>
+		<li>Malformed Contract ID → <code>400</code> before any price is quoted.</li>
+		<li>
+			Scan failure after payment (<code>404</code>, <code>422</code>, <code>502</code>) is
+			<strong>not</strong> settled — payer is not charged.
+		</li>
+		<li>Response body for success mirrors <code>toPublicScan()</code> from the SecurityReport scan block.</li>
+	</ul>
+</DocsLayout>

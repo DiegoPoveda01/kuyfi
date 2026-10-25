@@ -1,0 +1,129 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import InstallBar from '../components/InstallBar.astro';
+import McpButton from '../components/McpButton.astro';
+import { SITE } from '../content/nav';
+import { withBase } from '../lib/paths';
+---
+
+<DocsLayout
+	title="For LLMs & agents"
+	eyebrow="[ LLM · COPY ]"
+	description="Machine-readable documentation so coding agents can install, run, and explain Kuyfi without inventing APIs."
+>
+	<div class="llm-actions">
+		<a class="pill" href={withBase('/llms.txt')}>llms.txt</a>
+		<a class="pill" href={withBase('/llms-full.txt')}>llms-full.txt</a>
+		<McpButton href={withBase('/mcp')} />
+	</div>
+
+	<Callout type="tip" title="Preferred ingestion order">
+		<ol>
+			<li>Fetch <code>{SITE.url}/docs/llms.txt</code> for a compact project card.</li>
+			<li>Fetch <code>{SITE.url}/docs/llms-full.txt</code> for the full operator manual.</li>
+			<li>Only then open human HTML pages if you need diagrams or navigation.</li>
+		</ol>
+	</Callout>
+
+	<h2>One-paragraph project card (copy)</h2>
+	<pre><code>Kuyfi (@kuyfi/kuyfi, CLI `kuyfi`) is an open-source black-box security terminal for Soroban smart contracts on Stellar Testnet. Given a Contract ID, it fetches on-chain WASM, reconstructs the attack surface from contractspecv0, runs type-aware Chaos Monkey fuzzing (simulate-first, optional Testnet broadcast with ephemeral Friendbot keys), classifies DiagnosticEvent traces into a six-signal taxonomy, and exports a SecurityReport as JSON/PDF. It is not a formal audit. Testnet only. Never fuzz unauthorized contracts.</code></pre>
+
+	<h2>Install copy for agents</h2>
+	<InstallBar />
+
+	<h2>Safe agent playbook</h2>
+	<ol>
+		<li>Confirm the user owns the Contract ID or has written authorization.</li>
+		<li>Confirm network is Testnet (Kuyfi hardcodes Testnet RPC).</li>
+		<li>
+			Prefer headless: <code>kuyfi &lt;ID&gt; --json</code> for structured output.
+		</li>
+		<li>
+			Treat <code>POTENTIAL_VULN</code> as investigate-first; never rewrite findings into
+			“confirmed CVE”.
+		</li>
+		<li>Do not invent Mainnet support, SaaS dashboards, or MCP tools that are not shipped.</li>
+	</ol>
+
+	<h2>Prompt stub</h2>
+	<pre><code>You are helping with Kuyfi, a Soroban black-box security CLI.
+Rules:
+- Use only documented commands from https://kuyfi.vercel.app/docs/llms-full.txt
+- Testnet only; no mainnet advice that implies Kuyfi supports it
+- Findings = signals, not proven exploits
+- Suggest `kuyfi &lt;CONTRACT_ID&gt; --json` for CI
+- Point humans to https://kuyfi.vercel.app/docs for deep pages</code></pre>
+
+	<h2>Structured facts agents often get wrong</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Fact</th>
+				<th>Truth</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Package name</td>
+				<td><code>@kuyfi/kuyfi</code> (command <code>kuyfi</code>)</td>
+			</tr>
+			<tr>
+				<td>Network</td>
+				<td>Stellar Testnet only</td>
+			</tr>
+			<tr>
+				<td>Source required?</td>
+				<td>No — WASM / contractspec on-chain</td>
+			</tr>
+			<tr>
+				<td>HTTP API</td>
+				<td>Optional paid OSINT scan only; no remote Chaos Monkey</td>
+			</tr>
+			<tr>
+				<td>Report schema</td>
+				<td><code>schemaVersion: "1.0.0"</code></td>
+			</tr>
+			<tr>
+				<td>Tagline</td>
+				<td>Before the Breach.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>MCP</h2>
+	<p>
+		A Model Context Protocol surface is reserved for a later release. Use the
+		<a href={withBase('/mcp')}>MCP page</a> and header <strong>MCP Connect</strong> button as the
+		stable entry point once a server ships — config shape is documented there as a stub.
+	</p>
+</DocsLayout>
+
+<style>
+	.llm-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		align-items: center;
+		margin: 0 0 1.5rem;
+	}
+
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.45rem 0.75rem;
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius);
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		color: var(--text);
+		text-decoration: none;
+		background: rgba(255, 255, 255, 0.03);
+	}
+
+	.pill:hover {
+		border-color: var(--yellow);
+		color: var(--yellow);
+		text-decoration: none;
+	}
+</style>

@@ -1,0 +1,48 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+	title="Architecture"
+	eyebrow="[ 11 · SYSTEM ]"
+	description="Single-process CLI/TUI (plus optional paid scan server). UI never owns the audit engine."
+>
+	<pre><code>CLI ENTRY  source/cli.tsx
+   ├── TUI     app.tsx → screens/ components/ hooks/ ui/
+   └── headless cli_runtime.ts
+              │
+              ▼
+        AUDIT ENGINE  source/modules/
+        scanner → chaos_monkey → security_report → report_export</code></pre>
+
+	<h2>Audit engine modules</h2>
+	<ul>
+		<li><code>scanner.ts</code> — WASM fetch + contractspec parse</li>
+		<li><code>chaos_monkey/</code> — fuzzers, router, traces, reporter</li>
+		<li><code>audit.ts</code> — ScanResult + ChaosReport → AuditRun</li>
+		<li><code>security_report.ts</code> — canonical SecurityReport 1.0.0</li>
+		<li><code>report_export.ts</code> / <code>pdf_report.ts</code> — JSON + PDF</li>
+		<li><code>scan_server.ts</code> — Express + x402 paid scanner</li>
+		<li><code>network.ts</code> — Testnet RPC constant</li>
+	</ul>
+
+	<h2>Security properties</h2>
+	<ul>
+		<li>No private key storage</li>
+		<li>Testnet only</li>
+		<li>Paid endpoint is scan-only and keyless</li>
+		<li>Read-only OSINT phase first</li>
+		<li>Simulate-before-broadcast for every fuzz vector</li>
+	</ul>
+
+	<h2>Stack</h2>
+	<p>
+		TypeScript · Node ≥ 20 · React 19 · Ink 6 · <code>@stellar/stellar-sdk</code> · Express ·
+		pdfkit · meow · <code>@x402/express</code> · <code>local402-server</code>
+	</p>
+
+	<p>
+		For the deep dive, see the repo’s <code>ARCHITECTURE.md</code> and
+		<code>docs/technical-writeup.md</code>.
+	</p>
+</DocsLayout>

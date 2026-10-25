@@ -1,0 +1,68 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+	title="CLI reference"
+	eyebrow="[ 08 · CLI ]"
+	description="Headless and interactive entry points — same audit engine."
+>
+	<h2>Binaries</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Command</th>
+				<th>Entry</th>
+				<th>Purpose</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>kuyfi</code></td>
+				<td><code>dist/cli.js</code></td>
+				<td>TUI or headless audit</td>
+			</tr>
+			<tr>
+				<td><code>kuyfi-server</code></td>
+				<td><code>dist/server.js</code></td>
+				<td>Paid OSINT HTTP API</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Modes</h2>
+	<p>
+		<code>cli.tsx</code> uses <code>meow</code> + <code>selectCliMode()</code>:
+		<code>tui</code> | <code>headless</code> | <code>invalid</code>.
+	</p>
+
+	<pre><code># Interactive TUI (no args)
+kuyfi
+
+# Headless audit
+kuyfi &lt;CONTRACT_ID&gt;
+kuyfi &lt;CONTRACT_ID&gt; --json
+kuyfi &lt;CONTRACT_ID&gt; --pdf
+kuyfi &lt;CONTRACT_ID&gt; --json --pdf
+
+# From source checkout
+npm start
+node dist/cli.js &lt;CONTRACT_ID&gt; --json</code></pre>
+
+	<h2>Contract ID shape</h2>
+	<pre><code>/^C[A-Z0-9]&#123;55&#125;$/</code></pre>
+
+	<h2>Exit / errors</h2>
+	<p>
+		Headless path lives in <code>cli_runtime.ts</code>
+		(<code>runHeadlessAudit()</code>). Scan failures surface structured
+		<code>ScanError</code> codes; presentation formatting is CLI-specific but classification
+		is shared.
+	</p>
+
+	<h2>Network</h2>
+	<p>
+		RPC URL is a single constant in <code>network.ts</code>:
+		<code>https://soroban-testnet.stellar.org</code>. No mainnet selector in v0.1.0.
+	</p>
+</DocsLayout>

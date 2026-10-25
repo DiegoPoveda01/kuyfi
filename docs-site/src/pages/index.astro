@@ -1,0 +1,154 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import InstallBar from '../components/InstallBar.astro';
+import Pipeline from '../components/Pipeline.astro';
+import Callout from '../components/Callout.astro';
+import McpButton from '../components/McpButton.astro';
+import { SITE } from '../content/nav';
+import { withBase } from '../lib/paths';
+---
+
+<DocsLayout
+	title="KUYFI"
+	eyebrow={`${SITE.version} · OPEN SOURCE`}
+	description="Black-box security for Soroban."
+>
+	<p>
+		Kuyfi analyzes deployed Soroban contracts from their on-chain interface, so you
+		can inspect their attack surface, exercise inputs and review execution traces
+		without requiring the source code.
+	</p>
+
+	<InstallBar />
+
+	<div class="cta-row">
+		<a class="btn btn--ghost" href={SITE.github} target="_blank" rel="noreferrer"
+			>VIEW ON GITHUB</a
+		>
+		<a class="btn btn--ghost" href={withBase('/quickstart')}>QUICKSTART</a>
+		<McpButton variant="hero" href={withBase('/mcp')} />
+	</div>
+
+	<Callout type="tip" title="What Kuyfi is">
+		<p>
+			An automated <strong>black-box</strong> security terminal for Soroban. It is the
+			layer <em>before</em> a formal audit — catch obvious surface issues on Testnet so
+			auditors start from a cleaner baseline. It is <strong>not</strong> a certification
+			and does not replace Ottersec, Veridise, CoinFabrik, or peers.
+		</p>
+	</Callout>
+
+	<Pipeline />
+
+	<h2>Why it exists</h2>
+	<p>
+		Formal audits need source, scheduling, and budget. Anyone can invoke a deployed
+		Soroban contract; not everyone has its Rust source. Kuyfi starts from what is
+		actually observable on-chain: WASM bytecode, the <code>contractspecv0</code> section,
+		and runtime behavior under simulation and Testnet calls.
+	</p>
+
+	<pre><code>run Kuyfi → fix obvious issues → submit to a formal audit with a cleaner baseline</code></pre>
+
+	<h2>What you get</h2>
+	<ul>
+		<li>
+			<strong>OSINT Scanner</strong> — reconstruct functions, params, and UDTs from a
+			Contract ID alone.
+		</li>
+		<li>
+			<strong>Chaos Monkey</strong> — type-aware fuzzing (math, auth, call-order, fee,
+			liquidity), simulate-first, broadcast only when preflight succeeds.
+		</li>
+		<li>
+			<strong>SecurityReport</strong> — one canonical object, exportable as JSON and PDF
+			with execution evidence (hashes, ledgers, explorer URLs).
+		</li>
+		<li>
+			<strong>TUI + headless CLI</strong> — same engine for interactive and CI use.
+		</li>
+		<li>
+			<strong>Paid scan API</strong> — optional x402/Local402 endpoint for read-only
+			scans (Chaos Monkey stays local).
+		</li>
+	</ul>
+
+	<h2>Hard constraints</h2>
+	<ul>
+		<li>Stellar <strong>Testnet only</strong> — RPC is hardcoded to {SITE.rpc}.</li>
+		<li>No private keys persisted — ephemeral Friendbot-funded keypairs in memory.</li>
+		<li>Findings are <strong>signals</strong>, not proven exploits.</li>
+		<li>Only test contracts you own or are authorized to test.</li>
+	</ul>
+
+	<h2>Docs map</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Section</th>
+				<th>Start here if you want…</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href={withBase('/installation')}>Installation</a></td>
+				<td>npm global install, Windows notes, from-source build</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/pipeline')}>Pipeline</a></td>
+				<td>The Contract ID → report mental model</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/chaos-monkey')}>Chaos Monkey</a></td>
+				<td>Vector families and simulate → broadcast lifecycle</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/for-llms')}>For LLMs</a></td>
+				<td>Machine-readable copy, prompts, llms.txt</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/mcp')}>MCP</a></td>
+				<td>Future Model Context Protocol hook + Connect button</td>
+			</tr>
+		</tbody>
+	</table>
+</DocsLayout>
+
+<style>
+	.cta-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		align-items: center;
+		margin: 0 0 2rem;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.7rem 1.1rem;
+		font-family: var(--font-display);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-decoration: none;
+		border-radius: var(--radius);
+	}
+
+	.btn--ghost {
+		border: 1px solid rgba(255, 255, 255, 0.55);
+		color: var(--text);
+		background: transparent;
+	}
+
+	.btn--ghost:hover {
+		border-color: var(--yellow);
+		color: var(--yellow);
+		text-decoration: none;
+	}
+
+	strong {
+		color: var(--text);
+	}
+</style>

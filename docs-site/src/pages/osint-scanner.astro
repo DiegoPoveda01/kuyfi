@@ -1,0 +1,69 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<DocsLayout
+	title="OSINT Scanner"
+	eyebrow="[ 04 · RECON ]"
+	description="Map a deployed contract’s attack surface from WASM alone — no source, no ABI file, no cooperation from the author."
+>
+	<h2>What it does</h2>
+	<p>Given only a Contract ID, the scanner:</p>
+	<ol>
+		<li>
+			Fetches WASM via read-only RPC (<code>getContractWasmByContractId</code>) — nothing
+			broadcast.
+		</li>
+		<li>Decodes the <code>contractspecv0</code> custom section from the binary.</li>
+		<li>Builds a registry of user-defined types (structs, unions, enums).</li>
+		<li>Renders every function: name, parameter types, return presence.</li>
+	</ol>
+
+	<h2>Domain objects</h2>
+	<pre><code>ScanResult &#123;
+  contractId: string
+  bytecodeSize: number
+  functions: ScannedFunction[]   // name, params[], hasReturn
+  udtRegistry: UdtRegistry       // Map of UDT definitions
+&#125;
+
+ScanError codes:
+  CONTRACT_NOT_FOUND | XDR_ALIGN_FAILURE | RPC_UNAVAILABLE | UNKNOWN</code></pre>
+
+	<p>
+		<code>ScanError.code</code> is the stable switch both TUI and CLI use — presentation
+		layers must not parse <code>message</code> text to decide what happened.
+	</p>
+
+	<h2>Parsing notes</h2>
+	<ul>
+		<li>
+			<code>parseContractSpecSection()</code> is a pure, network-free step — unit-testable
+			with synthetic XDR buffers.
+		</li>
+		<li>
+			Alignment-tolerant decode: the parser brute-forces 4-byte aligned lengths until an
+			<code>ScSpecEntry</code> parses, then advances.
+		</li>
+		<li>
+			UDT resolution used later by Chaos Monkey has depth limits and cycle detection; unknown
+			types cause generators to skip rather than invent values.
+		</li>
+	</ul>
+
+	<Callout type="tip" title="Paid HTTP surface">
+		<p>
+			<code>kuyfi-server</code> exposes only this read-only scanner over
+			<code>GET /scan/:contractId</code> (x402). Chaos Monkey is never offered over HTTP
+			because it broadcasts transactions.
+		</p>
+	</Callout>
+
+	<h2>TUI</h2>
+	<p>
+		Home → <strong>[1] OSINT Scanner</strong>. Paste a Contract ID, watch the fetch, inspect
+		the attack-surface table. The last successful scan can feed Chaos Monkey in the same
+		session.
+	</p>
+</DocsLayout>

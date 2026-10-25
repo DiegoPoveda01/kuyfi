@@ -1,0 +1,108 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import McpButton from '../components/McpButton.astro';
+import CopyButton from '../components/CopyButton.astro';
+import { withBase } from '../lib/paths';
+
+const mcpConfig = `{
+  "mcpServers": {
+    "kuyfi": {
+      "command": "npx",
+      "args": ["-y", "@kuyfi/mcp@latest"],
+      "env": {
+        "KUYFI_NETWORK": "stellar:testnet"
+      }
+    }
+  }
+}`;
+---
+
+<DocsLayout
+	title="MCP"
+	eyebrow="[ MCP · SOON ]"
+	description="Reserved Model Context Protocol entry for Kuyfi — wire agents once the server package ships."
+>
+	<div class="hero-row">
+		<McpButton variant="hero" href="#connect" />
+		<span class="status">Status: stub · package not published yet</span>
+	</div>
+
+	<Callout type="info" title="Why this page exists now">
+		<p>
+			The marketing site and docs expose a stable <strong>MCP Connect</strong> affordance so
+			future clients (Cursor, Claude, custom agents) can deep-link here. The npm package
+			<code>@kuyfi/mcp</code> is a planned companion — do not treat the config below as
+			live until this page’s status flips to <em>available</em>.
+		</p>
+	</Callout>
+
+	<h2 id="connect">Intended capabilities</h2>
+	<ul>
+		<li><code>kuyfi_scan</code> — OSINT attack-surface reconstruction for a Contract ID</li>
+		<li>
+			<code>kuyfi_audit</code> — local Chaos Monkey campaign (explicit user confirmation;
+			Testnet only)
+		</li>
+		<li><code>kuyfi_report_schema</code> — SecurityReport 1.0.0 field map</li>
+		<li><code>kuyfi_signals</code> — finding taxonomy reference</li>
+	</ul>
+
+	<p>
+		Remote paid scan may map to a read-only tool backed by <code>GET /scan/:id</code>. Chaos
+		Monkey will remain opt-in and local-first.
+	</p>
+
+	<h2>Draft Cursor / Claude config</h2>
+	<p>Copy this when <code>@kuyfi/mcp</code> is published:</p>
+	<div class="config-block">
+		<pre><code>{mcpConfig}</code></pre>
+		<div class="config-actions">
+			<CopyButton text={mcpConfig} label="COPY CONFIG" />
+		</div>
+	</div>
+
+	<h2>Connect button contract</h2>
+	<ul>
+		<li>Header + docs pages render <code>&lt;McpButton&gt;</code> linking here.</li>
+		<li>
+			Attribute <code>data-mcp-entry</code> marks the CTA for future JS enhancers (deeplink
+			handlers, install modals).
+		</li>
+		<li>Visual language: yellow border, soft yellow fill — matches Install COPY CTA.</li>
+	</ul>
+
+	<h2>Until then</h2>
+	<p>
+		Agents should use CLI + <a href={withBase('/for-llms')}>For LLMs</a>:
+	</p>
+	<pre><code>npm install -g @kuyfi/kuyfi
+kuyfi &lt;CONTRACT_ID&gt; --json</code></pre>
+</DocsLayout>
+
+<style>
+	.hero-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.status {
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		color: var(--text-dim);
+	}
+
+	.config-block {
+		position: relative;
+		margin: 1rem 0 1.5rem;
+	}
+
+	.config-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 0.5rem;
+	}
+</style>

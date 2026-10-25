@@ -1,0 +1,50 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import { withBase } from '../lib/paths';
+---
+
+<DocsLayout
+	title="FAQ"
+	eyebrow="[ FAQ ]"
+	description="Short answers to the questions humans and agents ask most."
+>
+	<h2>Is Kuyfi an auditor?</h2>
+	<p>
+		No. It is automated black-box security testing / pre-audit tooling. Formal audits still
+		matter.
+	</p>
+
+	<h2>Do I need Rust source?</h2>
+	<p>No. Kuyfi works from deployed WASM and <code>contractspecv0</code>.</p>
+
+	<h2>Does it work on Mainnet?</h2>
+	<p>No. RPC is hardcoded to Stellar Testnet.</p>
+
+	<h2>Will Chaos Monkey drain my wallet?</h2>
+	<p>
+		It uses ephemeral Friendbot-funded Testnet accounts. Fees are small Testnet XLM. Still:
+		only hit contracts you are allowed to test.
+	</p>
+
+	<h2>Why so many PRECONDITION / SECURE results?</h2>
+	<p>
+		Type-correct inputs are often not semantically valid (unauthorized signer, missing setup).
+		Those outcomes are filtered from the findings list on purpose.
+	</p>
+
+	<h2>Can I expose Chaos Monkey on the paid API?</h2>
+	<p>By design, no. Only the read-only scanner is HTTP-exposed.</p>
+
+	<h2>Where is the website?</h2>
+	<p>
+		<a href="https://kuyfi.vercel.app">kuyfi.vercel.app</a> · Docs live under
+		<code>/docs</code> · GitHub
+		<a href="https://github.com/alex0tico/kuyfi">alex0tico/kuyfi</a>.
+	</p>
+
+	<h2>How should LLMs read the docs?</h2>
+	<p>
+		Start with <a href={withBase('/llms.txt')}>llms.txt</a>, then
+		<a href={withBase('/llms-full.txt')}>llms-full.txt</a>.
+	</p>
+</DocsLayout>

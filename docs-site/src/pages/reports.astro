@@ -1,0 +1,80 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<DocsLayout
+	title="Reports"
+	eyebrow="[ 07 · EVIDENCE ]"
+	description="One SecurityReport object — two export formats that always agree."
+>
+	<h2>SecurityReport</h2>
+	<p>
+		Canonical schema <code>schemaVersion: "1.0.0"</code>. Built from an
+		<code>AuditRun</code> (scan + ChaosReport) by <code>security_report.ts</code>.
+	</p>
+
+	<ul>
+		<li>Target info (contract, network, bytecode size)</li>
+		<li>Scan summary (functions / UDTs)</li>
+		<li>Findings with signal, severity, KYF IDs</li>
+		<li>Severity / signal counts</li>
+		<li>Execution evidence (below)</li>
+	</ul>
+
+	<h2>Execution evidence</h2>
+	<p>So claims can be checked without trusting Kuyfi’s own word:</p>
+	<ul>
+		<li>
+			Run-wide counters: vectors executed, broadcasts, txs with hash.
+		</li>
+		<li>
+			Per finding: simulation failed?, broadcast?, parsed DiagnosticEvent trace.
+		</li>
+		<li>
+			If broadcast: <code>transactionHash</code>, <code>ledger</code>, stellar.expert URL.
+		</li>
+		<li>
+			<code>verificationTransactions</code>: small deterministic sample — first successful
+			broadcast and first failed broadcast (not a full dump).
+		</li>
+	</ul>
+
+	<Callout type="info" title="Not every finding has a tx">
+		<p>
+			Simulation failures are classified from diagnostics and never sent. Only broadcast
+			transactions can be independently verified on-chain.
+		</p>
+	</Callout>
+
+	<h2>Export</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Format</th>
+				<th>How</th>
+				<th>Notes</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>JSON</td>
+				<td>TUI <code>[J]</code> / CLI <code>--json</code></td>
+				<td>Machine-readable; CI-friendly</td>
+			</tr>
+			<tr>
+				<td>PDF</td>
+				<td>TUI <code>[P]</code> / CLI <code>--pdf</code></td>
+				<td>pdfkit render; labeled as automated black-box, not a formal audit</td>
+			</tr>
+			<tr>
+				<td>Both</td>
+				<td>TUI <code>[B]</code> / <code>--json --pdf</code></td>
+				<td>Same underlying <code>report_export.ts</code></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<pre><code>kuyfi C… --json --pdf
+# writes SecurityReport JSON + PDF from the identical object</code></pre>
+</DocsLayout>

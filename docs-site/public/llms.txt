@@ -1,0 +1,61 @@
+# Kuyfi
+
+> Black-box security terminal for Soroban smart contracts on Stellar Testnet.
+> Tagline: Before the Breach.
+> Site: https://kuyfi.vercel.app
+> Docs: https://kuyfi.vercel.app/docs
+> npm: @kuyfi/kuyfi (CLI command: kuyfi)
+> GitHub: https://github.com/alex0tico/kuyfi
+> Version: 0.1.0 · License: MIT · Network: Stellar Testnet only
+
+Kuyfi analyzes deployed Soroban contracts from their on-chain interface (WASM + contractspecv0). No Rust source required. It reconstructs the attack surface, runs type-aware Chaos Monkey fuzzing (simulate first; broadcast to Testnet only when preflight succeeds), classifies DiagnosticEvent traces into six signals, and exports a SecurityReport as JSON and/or PDF.
+
+## Critical constraints for agents
+
+- Testnet only (RPC https://soroban-testnet.stellar.org). No Mainnet support in v0.1.0.
+- Findings are signals to investigate, not confirmed exploits or certifications.
+- Only fuzz contracts the user owns or is authorized to test.
+- Paid HTTP API exposes OSINT scan only — never Chaos Monkey.
+- Ephemeral Friendbot keypairs; secrets are not persisted.
+
+## Install
+
+```bash
+npm install -g @kuyfi/kuyfi
+kuyfi
+kuyfi <CONTRACT_ID> --json --pdf
+```
+
+Contract ID shape: /^C[A-Z0-9]{55}$/
+
+## Pipeline
+
+Contract ID → OSINT Scanner (fetch WASM) → Reconstruct attack surface → Chaos Monkey (type-aware vectors) → Simulate & classify → JSON/PDF SecurityReport (schemaVersion 1.0.0)
+
+## Docs index
+
+- https://kuyfi.vercel.app/docs/ — Overview
+- https://kuyfi.vercel.app/docs/installation — Install
+- https://kuyfi.vercel.app/docs/quickstart — First run
+- https://kuyfi.vercel.app/docs/pipeline — Pipeline
+- https://kuyfi.vercel.app/docs/osint-scanner — Scanner
+- https://kuyfi.vercel.app/docs/chaos-monkey — Fuzzing
+- https://kuyfi.vercel.app/docs/findings — Signals
+- https://kuyfi.vercel.app/docs/reports — Reports
+- https://kuyfi.vercel.app/docs/cli — CLI
+- https://kuyfi.vercel.app/docs/tui — TUI
+- https://kuyfi.vercel.app/docs/paid-api — x402 scan API
+- https://kuyfi.vercel.app/docs/architecture — Architecture
+- https://kuyfi.vercel.app/docs/for-llms — LLM guide
+- https://kuyfi.vercel.app/docs/mcp — MCP stub (Connect button; server not shipped yet)
+- https://kuyfi.vercel.app/docs/responsible-use — Policy
+- https://kuyfi.vercel.app/docs/faq — FAQ
+- https://kuyfi.vercel.app/docs/llms-full.txt — Full machine-readable manual
+
+## Optional paid scan server
+
+```bash
+# PAY_TO=G... public address only
+kuyfi-server
+# GET /scan/:contractId → 402 then 200 with scan surface
+```
