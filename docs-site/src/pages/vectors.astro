@@ -1,0 +1,169 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import Toc from '../components/Toc.astro';
+import {withBase} from '../lib/paths';
+
+const toc = [
+	{id: 'math', label: 'Math / boundary'},
+	{id: 'access', label: 'Authorization'},
+	{id: 'order', label: 'Call ordering'},
+	{id: 'fee', label: 'Fee / BPS'},
+	{id: 'liquidity', label: 'Liquidity'},
+	{id: 'admin', label: 'Admin name patterns'},
+];
+---
+
+<DocsLayout
+	title="Attack vectors reference"
+	eyebrow="[ VECTORS · CATALOG ]"
+	description="Complete catalog of Chaos Monkey vector families, names, and targeting rules."
+>
+	<Toc items={toc} />
+
+	<Callout type="tip" title="How to read this">
+		<p>
+			Every vector is <strong>simulated first</strong>. Names like
+			<code>amount::MAX_I128</code> mean parameter <code>amount</code> received attack
+			<code>MAX_I128</code> while other params stayed at type-correct baselines. Deep narrative:
+			<a href={withBase('/chaos-monkey')}>Chaos Monkey</a>.
+		</p>
+	</Callout>
+
+	<h2 id="math">1 · Math / boundary</h2>
+	<p>Module <code>fuzzer_math.ts</code> — every function with parameters. One-variable-at-a-time.</p>
+	<table>
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Attack labels</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Integers</td>
+				<td><code>ZERO</code> <code>ONE</code> <code>NEG_ONE</code> <code>MAX_*</code> <code>MIN_*</code> (e.g. <code>MAX_I128</code>)</td>
+			</tr>
+			<tr>
+				<td>Address</td>
+				<td><code>RANDOM_ADDR_A</code> <code>RANDOM_ADDR_B</code></td>
+			</tr>
+			<tr>
+				<td>Bool</td>
+				<td><code>TRUE</code> <code>FALSE</code></td>
+			</tr>
+			<tr>
+				<td>Bytes / BytesN</td>
+				<td><code>EMPTY_BYTES</code> <code>ZERO_BYTES_N</code> <code>FF_BYTES_N</code> <code>LARGE_BYTES</code></td>
+			</tr>
+			<tr>
+				<td>String / Symbol</td>
+				<td><code>EMPTY_STR</code> <code>LONG_STR</code> <code>EMPTY_SYMBOL</code> <code>LONG_SYMBOL</code> <code>OVERSIZE_SYMBOL</code></td>
+			</tr>
+			<tr>
+				<td>Vec&lt;T&gt;</td>
+				<td><code>EMPTY_VEC</code> <code>ONE_ELEM_VEC</code> <code>TWO_ELEM_VEC</code></td>
+			</tr>
+			<tr>
+				<td>Option&lt;T&gt;</td>
+				<td><code>NONE</code> <code>SOME_BASELINE</code></td>
+			</tr>
+			<tr>
+				<td>Timepoint / Duration</td>
+				<td><code>ZERO_TS</code> <code>MAX_TS</code> <code>ZERO_DUR</code> <code>MAX_DUR</code></td>
+			</tr>
+			<tr>
+				<td>UDTs</td>
+				<td>Recursive: one struct field / enum case / union payload slot at a time</td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		Unresolved types (unknown UDT, depth/cycle limit) → skip; never invent a value. Zero-param
+		functions get no math vectors.
+	</p>
+
+	<h2 id="access">2 · Authorization / access control</h2>
+	<p>Module <code>fuzzer_access.ts</code>.</p>
+	<table>
+		<thead>
+			<tr>
+				<th>Vector</th>
+				<th>Targets</th>
+				<th>Behavior</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>UNAUTHORIZED_CALL</code></td>
+				<td>Admin-pattern names</td>
+				<td>Call from ephemeral (non-admin) key with baseline args</td>
+			</tr>
+			<tr>
+				<td><code>REINIT_ATTACK</code></td>
+				<td><code>initialize</code> / <code>init</code> / <code>setup</code></td>
+				<td>Re-run initializer on already-deployed contract</td>
+			</tr>
+			<tr>
+				<td><code>SELF_CALL_ATTACK</code></td>
+				<td><code>set_admin</code> family</td>
+				<td>Attacker address in every Address param</td>
+			</tr>
+			<tr>
+				<td><code>UNAUTHORIZED_ADDR_CALL</code></td>
+				<td>Non-admin fn with Address param</td>
+				<td>Unrelated address in that slot; signed only by ephemeral key</td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		These are <strong>expected to fail</strong>. Success → often
+		<code>POTENTIAL_VULN</code> (still a hypothesis under black-box limits).
+	</p>
+
+	<h2 id="order">3 · Call ordering</h2>
+	<p>Module <code>fuzzer_call_order.ts</code> — once per session. Same function twice with baselines.</p>
+	<table>
+		<thead>
+			<tr>
+				<th>Group</th>
+				<th>Name patterns</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>REINIT_SEQUENCE</code></td>
+				<td><code>initialize</code>, <code>init</code>, <code>setup</code></td>
+			</tr>
+			<tr>
+				<td><code>REPEATED_WITHDRAW_SEQUENCE</code></td>
+				<td><code>withdraw</code>, <code>remove</code></td>
+			</tr>
+			<tr>
+				<td><code>REPEATED_CLAIM_SEQUENCE</code></td>
+				<td><code>claim</code>, <code>harvest</code></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2 id="fee">4 · Fee / BPS</h2>
+	<p>
+		Module <code>fuzzer_fee.ts</code> — numeric params whose names look fee/BPS-shaped.
+		Labels <code>BPS_*</code>: 0, 1, 9999, 10000, 10001, type max.
+	</p>
+
+	<h2 id="liquidity">5 · Liquidity ratio</h2>
+	<p>
+		Module <code>fuzzer_liquidity.ts</code> — first two numeric params on
+		swap/liquidity/reserve-shaped names. Paired extremes:
+		<code>ZERO_A_MAX_B</code>, <code>MAX_A_MAX_B</code>, etc.
+	</p>
+
+	<h2 id="admin">Admin name patterns</h2>
+	<pre><code>pause, unpause, initialize, init, setup, upgrade,
+set_admin, set_pending_admin, transfer_admin, emergency</code></pre>
+	<p>
+		Matching is substring on the lowercased function name (
+		<code>isAdminFunctionByName</code>).
+	</p>
+</DocsLayout>

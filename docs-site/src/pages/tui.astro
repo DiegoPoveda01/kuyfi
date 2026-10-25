@@ -1,0 +1,67 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout
+	title="Interactive TUI"
+	eyebrow="[ 09 · TERMINAL ]"
+	description="Ink + React terminal UI — chrome only; all scanning and fuzzing live in source/modules/."
+>
+	<h2>Menu modules</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Key</th>
+				<th>Module</th>
+				<th>Role</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>[1]</code></td>
+				<td>OSINT Scanner</td>
+				<td>Map attack surface</td>
+			</tr>
+			<tr>
+				<td><code>[2]</code></td>
+				<td>Chaos Monkey</td>
+				<td>Fuzz &amp; stress test</td>
+			</tr>
+			<tr>
+				<td><code>[3]</code></td>
+				<td>System Logs</td>
+				<td>RPC / status</td>
+			</tr>
+			<tr>
+				<td><code>[4]</code></td>
+				<td>About</td>
+				<td>Project info</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p>Navigate with arrows or number keys; Enter to open; Esc to go back (<code>ViewShell</code>).</p>
+
+	<h2>Layout tiers</h2>
+	<ul>
+		<li><code>large</code> — ≥ 100 columns</li>
+		<li><code>compact</code> — 70–99 columns</li>
+		<li><code>tooSmall</code> — &lt; 70 cols or &lt; 20 rows</li>
+	</ul>
+
+	<p>
+		<code>useTerminalSize</code> mitigates Ink shrink-resize artifacts (stale frames) with a
+		debounced full-screen clear — without unmounting an in-flight scan or Chaos Monkey run.
+	</p>
+
+	<h2>Chaos Monkey exports</h2>
+	<p>After a campaign: <code>[J]</code> JSON · <code>[P]</code> PDF · <code>[B]</code> both.</p>
+
+	<h2>File map</h2>
+	<pre><code>source/cli.tsx          entry / mode select
+source/app.tsx          navigation orchestrator
+source/screens/         one file per screen
+source/components/      header, shell, notices
+source/hooks/           terminal size
+source/ui/              layout, format, ASCII cats/logo</code></pre>
+</DocsLayout>

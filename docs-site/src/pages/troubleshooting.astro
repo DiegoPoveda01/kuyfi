@@ -1,0 +1,151 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import Toc from '../components/Toc.astro';
+import {withBase} from '../lib/paths';
+
+const toc = [
+	{id: 'install', label: 'Install / CLI'},
+	{id: 'scan', label: 'Scanner errors'},
+	{id: 'chaos', label: 'Chaos Monkey'},
+	{id: 'reports', label: 'Reports'},
+	{id: 'server', label: 'Paid server'},
+];
+---
+
+<DocsLayout
+	title="Troubleshooting"
+	eyebrow="[ DEBUG ]"
+	description="Fix the failures people and agents hit most often with Kuyfi."
+>
+	<Toc items={toc} />
+
+	<Callout type="info" title="Still stuck?">
+		<p>
+			Open an issue on GitHub with OS, Node version, Contract ID (Testnet), and the exact
+			<code>ScanError.code</code> or CLI stderr. Never paste secret keys.
+		</p>
+	</Callout>
+
+	<h2 id="install">Install / CLI</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Symptom</th>
+				<th>Fix</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>kuyfi</code> not found after npm install</td>
+				<td>
+					Confirm Node ≥ 20; reinstall global package; check npm prefix bin is on
+					<code>PATH</code>.
+				</td>
+			</tr>
+			<tr>
+				<td>PowerShell blocks <code>kuyfi.ps1</code></td>
+				<td>
+					Use <code>kuyfi.cmd</code> / <code>npm.cmd</code>, or set CurrentUser
+					<code>RemoteSigned</code>. See <a href={withBase('/installation')}>Installation</a>.
+				</td>
+			</tr>
+			<tr>
+				<td><code>invalid</code> Contract ID</td>
+				<td>Must match <code>C</code> + 55 <code>A-Z0-9</code> characters — no lowercase.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2 id="scan">Scanner errors</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Code</th>
+				<th>Meaning</th>
+				<th>What to try</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>CONTRACT_NOT_FOUND</code></td>
+				<td>RPC has no WASM for that ID</td>
+				<td>Confirm Testnet deploy; wait for indexing; check typos</td>
+			</tr>
+			<tr>
+				<td><code>RPC_UNAVAILABLE</code></td>
+				<td>Network / endpoint down</td>
+				<td>Check connectivity to soroban-testnet.stellar.org; retry</td>
+			</tr>
+			<tr>
+				<td><code>XDR_ALIGN_FAILURE</code></td>
+				<td>contractspec parse failed</td>
+				<td>
+					Contract may lack a standard <code>contractspecv0</code> section (non-SDK or exotic
+					build)
+				</td>
+			</tr>
+			<tr>
+				<td><code>UNKNOWN</code></td>
+				<td>Unclassified failure</td>
+				<td>Capture full message; open issue</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2 id="chaos">Chaos Monkey</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Symptom</th>
+				<th>Explanation</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Lots of PRECONDITION / few findings</td>
+				<td>
+					Normal: ephemeral account is not an authorized signer. Noise is filtered from the
+					findings list on purpose.
+				</td>
+			</tr>
+			<tr>
+				<td>Friendbot / funding fails</td>
+				<td>Testnet faucet hiccup — retry later; check RPC health.</td>
+			</tr>
+			<tr>
+				<td>Many TIMEOUTs</td>
+				<td>Network congestion or slow confirmations — rerun; treat as LOW / inconclusive.</td>
+			</tr>
+			<tr>
+				<td>Function skipped</td>
+				<td>
+					Unresolved UDT or empty param list for that family — see
+					<a href={withBase('/vectors')}>Vectors</a>.
+				</td>
+			</tr>
+			<tr>
+				<td>“Is my contract safe? Zero findings.”</td>
+				<td>
+					<strong>No.</strong> Absence of findings ≠ absence of vulns. Black-box coverage is
+					partial.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2 id="reports">Reports</h2>
+	<ul>
+		<li>JSON and PDF disagree? They shouldn’t — same <code>reportId</code>. Re-export from one run.</li>
+		<li>Missing explorer URL? Simulation-only classification never broadcasts.</li>
+		<li>CI parse errors? Gate on <code>schemaVersion === "1.0.0"</code> — see <a href={withBase('/report-schema')}>schema</a>.</li>
+	</ul>
+
+	<h2 id="server">Paid scan server</h2>
+	<ul>
+		<li><code>PAY_TO</code> missing / secret key → use a public <code>G…</code> only.</li>
+		<li>Always 402 → client must complete x402 payment (Local402 client quote flow).</li>
+		<li>400 before quote → malformed Contract ID.</li>
+		<li>Chaos Monkey over HTTP? Intentionally unsupported.</li>
+	</ul>
+</DocsLayout>
