@@ -2,14 +2,22 @@
 import { withBase } from '../lib/paths';
 
 interface Props {
+	/** Defaults to the stable connect path: /mcp#connect */
 	href?: string;
 	variant?: 'header' | 'hero' | 'inline';
 }
 
-const { href = withBase('/mcp'), variant = 'header' } = Astro.props;
+const { href = `${withBase('/mcp')}#connect`, variant = 'header' } = Astro.props;
 ---
 
-<a class:list={['mcp-btn', `mcp-btn--${variant}`]} href={href} data-mcp-entry>
+<a
+	class:list={['mcp-btn', `mcp-btn--${variant}`]}
+	href={href}
+	data-mcp-entry
+	data-mcp-connect
+	title="Conectar el MCP al server de Kuyfi"
+	aria-label="Conectar el MCP al server de Kuyfi"
+>
 	<span class="mcp-btn__dot" aria-hidden="true"></span>
 	<span class="mcp-btn__label">MCP</span>
 	<span class="mcp-btn__meta">Connect</span>

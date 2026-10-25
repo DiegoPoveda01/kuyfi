@@ -8,9 +8,9 @@ This folder is **separate** from the repo’s existing `docs/` markdown notes (`
 
 - Astro 7
 - Dark brand theme (yellow CTAs, pink labels, nebula grid, keyhole mark) matching the marketing site
-- Client-side docs search (`/` shortcut)
-- `llms.txt` + `llms-full.txt` for agents
-- MCP Connect button (stub until `@kuyfi/mcp` ships)
+- Client-side docs search (`⌘K` / `/`)
+- **Markdown for Agents** (plain Markdown — **not MDX**): Copy as Markdown, `/md/<slug>.md`, `llms.txt`
+- Agent setup page + MCP Connect stub
 - Report schema page + changelog mirror
 
 ## Develop

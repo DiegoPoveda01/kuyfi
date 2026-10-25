@@ -30,7 +30,7 @@ import { withBase } from '../lib/paths';
 			>VIEW ON GITHUB</a
 		>
 		<a class="btn btn--ghost" href={withBase('/quickstart')}>QUICKSTART</a>
-		<McpButton variant="hero" href={withBase('/mcp')} />
+		<McpButton variant="hero" />
 	</div>
 	<Callout type="tip" title="What Kuyfi is">
 		<p>
@@ -106,12 +106,16 @@ import { withBase } from '../lib/paths';
 				<td>Vector families and simulate → broadcast lifecycle</td>
 			</tr>
 			<tr>
-				<td><a href={withBase('/for-llms')}>For LLMs</a></td>
-				<td>Machine-readable copy, prompts, llms.txt</td>
+				<td><a href={withBase('/agent-setup')}>Agent setup</a></td>
+				<td>Markdown for Agents — Copy as Markdown, .md pages (not MDX)</td>
 			</tr>
 			<tr>
-				<td><a href={withBase('/mcp')}>MCP</a></td>
-				<td>Future Model Context Protocol hook + Connect button</td>
+				<td><a href={withBase('/for-llms')}>For LLMs</a></td>
+				<td>Prompts, playbook, llms.txt</td>
+			</tr>
+			<tr>
+				<td><a href={`${withBase('/mcp')}#connect`}>MCP Connect</a></td>
+				<td>Conectar el MCP al server de Kuyfi — config Cursor/Claude</td>
 			</tr>
 			<tr>
 				<td><a href={withBase('/report-schema')}>Report schema</a></td>

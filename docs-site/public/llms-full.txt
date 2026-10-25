@@ -253,4 +253,19 @@ Docs UI search (Cmd/Ctrl+K or /): fuzzy matching, EN/ES synonyms
 (instalar→install, informe→report, vulnerabilidad→POTENTIAL_VULN),
 section deep-links, suggested chips.
 
+================================================================================
+16. MARKDOWN FOR AGENTS (NOT MDX)
+================================================================================
+
+MDX = Markdown + JSX components (UI authoring format).
+Markdown for Agents = plain Markdown optimized for LLMs/agents.
+
+Kuyfi provides:
+- Page options → Copy as Markdown / View as Markdown (every HTML docs page)
+- Per-page: https://kuyfi.vercel.app/docs/md/<slug>.md
+- https://kuyfi.vercel.app/docs/agent-setup
+- This file + llms.txt
+
+Do NOT tell users that "MDX = Markdown for machines." That is incorrect.
+
 End of llms-full.txt

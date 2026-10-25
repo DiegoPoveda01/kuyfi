@@ -46,8 +46,9 @@ export const NAV: NavGroup[] = [
 	{
 		title: 'Agents & MCP',
 		items: [
-			{ href: '/for-llms', label: 'For LLMs', badge: 'LLM' },
-			{ href: '/mcp', label: 'MCP', badge: 'Soon' },
+			{ href: '/agent-setup', label: 'Agent setup', badge: 'MD' },
+			{ href: '/for-llms', label: 'For LLMs' },
+			{ href: '/mcp', label: 'MCP Connect', badge: 'Soon' },
 		],
 	},
 	{

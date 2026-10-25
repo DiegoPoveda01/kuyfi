@@ -46,6 +46,8 @@ export const SYNONYMS: Record<string, string[]> = {
 	friendbot: ['keypair', 'ephemeral', 'fund'],
 	xdr: ['contractspec', 'scspec', 'types'],
 	udt: ['struct', 'enum', 'union', 'composite'],
+	mdx: ['markdown', 'jsx', 'agent-setup', 'markdown for agents'],
+	markdown: ['agent', 'llms.txt', 'copy', 'md', 'agent-setup'],
 };
 
 export const SUGGESTIONS = [
@@ -55,10 +57,11 @@ export const SUGGESTIONS = [
 	{label: 'SecurityReport JSON', q: 'schemaVersion'},
 	{label: 'Paid scan API', q: 'x402'},
 	{label: 'MCP Connect', q: 'mcp'},
+	{label: 'Markdown for Agents', q: 'markdown for agents'},
+	{label: 'Copy as Markdown', q: 'copy as markdown'},
 	{label: 'Testnet only', q: 'testnet'},
 	{label: 'UNAUTHORIZED_CALL', q: 'UNAUTHORIZED_CALL'},
 ];
-
 export const SEARCH_INDEX: SearchEntry[] = [
 	{
 		id: 'overview',
@@ -241,22 +244,51 @@ export const SEARCH_INDEX: SearchEntry[] = [
 		keywords: ['troubleshoot', 'error', 'debug', 'fix', 'ayuda', 'problems'],
 	},
 	{
+		id: 'agent-setup',
+		title: 'Agent setup',
+		href: '/agent-setup',
+		group: 'Agents & MCP',
+		blurb: 'Markdown for Agents — Copy as Markdown, .md pages, llms.txt. Not MDX.',
+		body: 'markdown for agents copy as markdown view as markdown llms.txt plain markdown not mdx jsx cloudflare style curl md slug',
+		keywords: [
+			'agent',
+			'markdown',
+			'mdx',
+			'llms.txt',
+			'copy as markdown',
+			'agents',
+			'setup',
+		],
+		weight: 1.2,
+	},
+	{
 		id: 'llms',
 		title: 'For LLMs',
 		href: '/for-llms',
 		group: 'Agents & MCP',
 		blurb: 'llms.txt playbook and safe agent rules.',
-		body: 'llms-full.txt prompt stub agent playbook cursor do not invent mainnet',
+		body: 'llms-full.txt prompt stub agent playbook cursor do not invent mainnet markdown for agents not mdx',
 		keywords: ['llm', 'agent', 'cursor', 'prompt', 'llms.txt', 'ai'],
 	},
 	{
 		id: 'mcp',
-		title: 'MCP',
+		title: 'Conectar el MCP al server de Kuyfi',
 		href: '/mcp',
+		hash: 'connect',
 		group: 'Agents & MCP',
-		blurb: 'MCP Connect stub — @kuyfi/mcp not published yet.',
-		body: 'Model Context Protocol connect button draft config kuyfi_scan kuyfi_audit',
-		keywords: ['mcp', 'connect', 'protocol', 'soon'],
+		blurb: 'MCP Connect → copy Cursor/Claude/HTTP config for the Kuyfi server.',
+		body: 'conectar mcp server kuyfi mcpServers npx @kuyfi/mcp cursor claude desktop http mcp.kuyfi kuyfi_scan connect button',
+		keywords: [
+			'mcp',
+			'connect',
+			'conectar',
+			'server',
+			'cursor',
+			'claude',
+			'@kuyfi/mcp',
+			'protocol',
+		],
+		weight: 1.25,
 	},
 	{
 		id: 'policy',

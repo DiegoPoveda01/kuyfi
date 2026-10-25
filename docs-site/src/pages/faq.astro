@@ -57,15 +57,18 @@ import {withBase} from '../lib/paths';
 
 	<h2>How do agents / LLMs read the docs?</h2>
 	<p>
+		Use <strong>Markdown for Agents</strong> (plain Markdown) — not MDX.
+		Start at <a href={withBase('/agent-setup')}>Agent setup</a>:
 		<a href={withBase('/llms.txt')}>llms.txt</a> →
-		<a href={withBase('/llms-full.txt')}>llms-full.txt</a> → human pages. Search supports EN/ES
-		synonyms via <kbd>⌘K</kbd>.
+		<a href={withBase('/llms-full.txt')}>llms-full.txt</a> →
+		<code>/docs/md/&lt;slug&gt;.md</code> or Page options → Copy as Markdown.
+		Search: <kbd>⌘K</kbd>.
 	</p>
 
 	<h2>Is MCP ready?</h2>
 	<p>
 		Button + config stub exist; <code>@kuyfi/mcp</code> is not published yet. Use CLI until then —
-		<a href={withBase('/mcp')}>MCP page</a>.
+		<a href={`${withBase('/mcp')}#connect`}>Conectar el MCP al server de Kuyfi</a>.
 	</p>
 
 	<h2>Where is the website / repo?</h2>
