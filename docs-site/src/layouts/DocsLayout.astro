@@ -61,6 +61,15 @@ const next = currentIndex >= 0 && currentIndex < flat.length - 1 ? flat[currentI
 						)
 					}
 				</nav>
+
+				<footer class="doc-foot">
+					<p>
+						Kuyfi Docs · Before the Breach. ·{' '}
+						<a href={withBase('/llms.txt')}>llms.txt</a>
+						{' · '}
+						<a href={withBase('/mcp')}>MCP</a>
+					</p>
+				</footer>
 			</article>
 		</main>
 	</div>
@@ -167,5 +176,18 @@ const next = currentIndex >= 0 && currentIndex < flat.length - 1 ? flat[currentI
 		inset: var(--header-h) 0 0 0;
 		background: rgba(0, 0, 0, 0.55);
 		z-index: 25;
+	}
+
+	.doc-foot {
+		margin-top: 2.5rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.doc-foot p {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--text-dim);
 	}
 </style>

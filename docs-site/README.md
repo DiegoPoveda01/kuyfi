@@ -7,9 +7,11 @@ This folder is **separate** from the repo’s existing `docs/` markdown notes (`
 ## Stack
 
 - Astro 7
-- Dark brand theme (yellow CTAs, pink labels, nebula grid) matching the marketing site
+- Dark brand theme (yellow CTAs, pink labels, nebula grid, keyhole mark) matching the marketing site
+- Client-side docs search (`/` shortcut)
 - `llms.txt` + `llms-full.txt` for agents
 - MCP Connect button (stub until `@kuyfi/mcp` ships)
+- Report schema page + changelog mirror
 
 ## Develop
 

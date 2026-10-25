@@ -1,7 +1,17 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
 import Callout from '../components/Callout.astro';
+import Toc from '../components/Toc.astro';
 import { withBase } from '../lib/paths';
+
+const toc = [
+	{id: 'execution', label: 'Execution model'},
+	{id: 'constraint', label: 'Type-correct ≠ valid'},
+	{id: 'families', label: 'Five families'},
+	{id: 'session', label: 'Session lifecycle'},
+	{id: 'modules', label: 'Modules'},
+	{id: 'fixtures', label: 'Fixtures'},
+];
 ---
 
 <DocsLayout
@@ -9,6 +19,13 @@ import { withBase } from '../lib/paths';
 	eyebrow="[ 05 · FUZZ ]"
 	description="Type-aware fuzzing for Soroban — not random dumb bytes. Simulate first; broadcast only when preflight proceeds."
 >
+	<Toc items={toc} />
+
+	<p>
+		Full attack-label catalog (math labels, admin patterns, sequences):{' '}
+		<a href={withBase('/vectors')}>Attack vectors reference</a>.
+	</p>
+
 	<Callout type="warn" title="Real Testnet transactions">
 		<p>
 			Vectors whose simulation succeeds are signed with an ephemeral Friendbot-funded
@@ -16,7 +33,7 @@ import { withBase } from '../lib/paths';
 		</p>
 	</Callout>
 
-	<h2>Execution model</h2>
+	<h2 id="execution">Execution model</h2>
 	<pre><code>vector → simulate (preflight)
            ├─ simulation fails    → classify from diagnostic events (nothing sent)
            └─ simulation succeeds → sign → broadcast → poll → classify</code></pre>
@@ -26,14 +43,14 @@ import { withBase } from '../lib/paths';
 		broadcast txs appear in verification samples and explorer links.
 	</p>
 
-	<h2>Design constraint</h2>
+	<h2 id="constraint">Design constraint</h2>
 	<p>
 		<strong>Type-correct ≠ semantically valid.</strong> A random <code>Address</code> is not
 		a funded account, token, or authorized signer. Kuyfi classifies conservatively and treats
 		ambiguity as ambiguity — see <a href={withBase('/findings')}>Findings</a>.
 	</p>
 
-	<h2>Five vector families</h2>
+	<h2 id="families">Five vector families</h2>
 	<table>
 		<thead>
 			<tr>
@@ -85,7 +102,7 @@ import { withBase } from '../lib/paths';
 		</tbody>
 	</table>
 
-	<h2>Session lifecycle (<code>runChaosMonkey</code>)</h2>
+	<h2 id="session">Session lifecycle (<code>runChaosMonkey</code>)</h2>
 	<ol>
 		<li>Generate ephemeral keypair + Friendbot fund + on-chain confirmation.</li>
 		<li>Connect Testnet RPC.</li>
@@ -97,7 +114,7 @@ import { withBase } from '../lib/paths';
 		<li>Aggregate <code>ChaosReport</code> — <code>SECURE</code> / <code>PRECONDITION_FAIL</code> filtered from findings list, kept in counters.</li>
 	</ol>
 
-	<h2>Key modules</h2>
+	<h2 id="modules">Key modules</h2>
 	<ul>
 		<li><code>keypair_factory.ts</code> — ephemeral keys, never persisted</li>
 		<li><code>type_gen.ts</code> — baseline + attack <code>ScVal</code>s from XDR types</li>
@@ -107,9 +124,22 @@ import { withBase } from '../lib/paths';
 		<li><code>reporter.ts</code> — <code>KYF-NNN</code> IDs, verification transaction sample</li>
 	</ul>
 
-	<h2>Fixtures</h2>
+	<h2 id="fixtures">Fixtures</h2>
 	<p>
 		Repo <code>test-fixtures/</code> includes an intentionally vulnerable access-control
 		contract and a composite UDT fixture for controlled Testnet demos — not production code.
+	</p>
+	<ul>
+		<li>
+			<code>intentionally-vulnerable-contract</code> — <code>set_admin_value</code> without
+			<code>require_auth</code> vs secure twin; name chosen to match admin patterns.
+		</li>
+		<li>
+			<code>composite-udt-fixture</code> — nested structs/unions for recursive type_gen coverage.
+		</li>
+	</ul>
+	<p>
+		Classify outcomes with <a href={withBase('/findings')}>Findings &amp; signals</a>. Stuck?
+		<a href={withBase('/troubleshooting')}>Troubleshooting</a>.
 	</p>
 </DocsLayout>

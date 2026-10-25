@@ -1,5 +1,6 @@
 ---
 import McpButton from './McpButton.astro';
+import Search from './Search.astro';
 import { SITE } from '../content/nav';
 import { withBase } from '../lib/paths';
 ---
@@ -11,6 +12,10 @@ import { withBase } from '../lib/paths';
 			<span class="brand__name">KUYFI</span>
 			<span class="brand__docs">Docs</span>
 		</a>
+
+		<div class="header__search">
+			<Search />
+		</div>
 
 		<nav class="header__links" aria-label="External">
 			<a href={SITE.url} target="_blank" rel="noreferrer">Site</a>
@@ -36,12 +41,21 @@ import { withBase } from '../lib/paths';
 	function bindMenu() {
 		const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
 		const sidebar = document.getElementById('docs-sidebar');
-		if (!toggle || !sidebar) return;
+		if (!toggle || !sidebar || toggle.dataset.bound === '1') return;
+		toggle.dataset.bound = '1';
 		toggle.onclick = () => {
 			const open = sidebar.classList.toggle('is-open');
 			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 			document.body.classList.toggle('nav-open', open);
 		};
+		document.addEventListener('click', (ev) => {
+			if (!document.body.classList.contains('nav-open')) return;
+			const t = ev.target as Node;
+			if (sidebar.contains(t) || toggle.contains(t)) return;
+			sidebar.classList.remove('is-open');
+			toggle.setAttribute('aria-expanded', 'false');
+			document.body.classList.remove('nav-open');
+		});
 	}
 	bindMenu();
 	document.addEventListener('astro:page-load', bindMenu);
@@ -99,6 +113,14 @@ import { withBase } from '../lib/paths';
 		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
+	}
+
+	.header__search {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		max-width: 280px;
+		margin: 0 auto;
 	}
 
 	.header__links {

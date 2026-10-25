@@ -212,4 +212,45 @@ Intended future tools (names may change):
 5. Never claim Mainnet support or that Kuyfi replaces formal audits.
 6. Point humans to https://kuyfi.vercel.app/docs for UI docs.
 
+================================================================================
+13. VECTOR CATALOG (SUMMARY)
+================================================================================
+
+Math (fuzzer_math): OAT mutations — ZERO/ONE/NEG_ONE/MAX_*/MIN_*, RANDOM_ADDR_A/B,
+EMPTY/LARGE bytes/strings, EMPTY_VEC, NONE/SOME_BASELINE, recursive UDTs.
+Names like amount::MAX_I128 or p::Point.x::ZERO.
+
+Access (fuzzer_access):
+  UNAUTHORIZED_CALL, REINIT_ATTACK, SELF_CALL_ATTACK, UNAUTHORIZED_ADDR_CALL
+Admin name substrings: pause, unpause, initialize, init, setup, upgrade,
+set_admin, set_pending_admin, transfer_admin, emergency.
+
+Call order (once/session): REINIT_SEQUENCE, REPEATED_WITHDRAW_SEQUENCE,
+REPEATED_CLAIM_SEQUENCE.
+
+Fee: BPS_* on fee-shaped numeric params (0,1,9999,10000,10001,type max).
+Liquidity: paired extremes ZERO_A_MAX_B / MAX_A_MAX_B on swap/reserve-shaped fns.
+
+Full page: https://kuyfi.vercel.app/docs/vectors
+
+================================================================================
+14. SCAN ERROR CODES
+================================================================================
+
+CONTRACT_NOT_FOUND  — no WASM for ID on Testnet
+XDR_ALIGN_FAILURE   — contractspecv0 parse failed
+RPC_UNAVAILABLE     — transport / endpoint
+UNKNOWN             — catch-all
+
+Troubleshoot: https://kuyfi.vercel.app/docs/troubleshooting
+Glossary: https://kuyfi.vercel.app/docs/glossary
+
+================================================================================
+15. DOCS SEARCH (HUMANS)
+================================================================================
+
+Docs UI search (Cmd/Ctrl+K or /): fuzzy matching, EN/ES synonyms
+(instalar→install, informe→report, vulnerabilidad→POTENTIAL_VULN),
+section deep-links, suggested chips.
+
 End of llms-full.txt

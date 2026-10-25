@@ -25,8 +25,10 @@ export const NAV: NavGroup[] = [
 			{ href: '/pipeline', label: 'Pipeline' },
 			{ href: '/osint-scanner', label: 'OSINT Scanner' },
 			{ href: '/chaos-monkey', label: 'Chaos Monkey' },
+			{ href: '/vectors', label: 'Attack vectors' },
 			{ href: '/findings', label: 'Findings & signals' },
 			{ href: '/reports', label: 'Reports' },
+			{ href: '/report-schema', label: 'Report schema' },
 		],
 	},
 	{
@@ -36,6 +38,9 @@ export const NAV: NavGroup[] = [
 			{ href: '/tui', label: 'Interactive TUI' },
 			{ href: '/paid-api', label: 'Paid scan API' },
 			{ href: '/architecture', label: 'Architecture' },
+			{ href: '/glossary', label: 'Glossary' },
+			{ href: '/troubleshooting', label: 'Troubleshooting' },
+			{ href: '/changelog', label: 'Changelog' },
 		],
 	},
 	{

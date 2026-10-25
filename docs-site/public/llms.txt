@@ -40,12 +40,17 @@ Contract ID → OSINT Scanner (fetch WASM) → Reconstruct attack surface → Ch
 - https://kuyfi.vercel.app/docs/pipeline — Pipeline
 - https://kuyfi.vercel.app/docs/osint-scanner — Scanner
 - https://kuyfi.vercel.app/docs/chaos-monkey — Fuzzing
+- https://kuyfi.vercel.app/docs/vectors — Attack vector catalog
 - https://kuyfi.vercel.app/docs/findings — Signals
 - https://kuyfi.vercel.app/docs/reports — Reports
+- https://kuyfi.vercel.app/docs/report-schema — SecurityReport JSON schema + sample
 - https://kuyfi.vercel.app/docs/cli — CLI
 - https://kuyfi.vercel.app/docs/tui — TUI
 - https://kuyfi.vercel.app/docs/paid-api — x402 scan API
 - https://kuyfi.vercel.app/docs/architecture — Architecture
+- https://kuyfi.vercel.app/docs/glossary — Glossary
+- https://kuyfi.vercel.app/docs/troubleshooting — Troubleshooting
+- https://kuyfi.vercel.app/docs/changelog — Releases
 - https://kuyfi.vercel.app/docs/for-llms — LLM guide
 - https://kuyfi.vercel.app/docs/mcp — MCP stub (Connect button; server not shipped yet)
 - https://kuyfi.vercel.app/docs/responsible-use — Policy

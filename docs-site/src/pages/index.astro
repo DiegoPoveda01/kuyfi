@@ -4,6 +4,7 @@ import InstallBar from '../components/InstallBar.astro';
 import Pipeline from '../components/Pipeline.astro';
 import Callout from '../components/Callout.astro';
 import McpButton from '../components/McpButton.astro';
+import KeyholeGlow from '../components/KeyholeGlow.astro';
 import { SITE } from '../content/nav';
 import { withBase } from '../lib/paths';
 ---
@@ -13,11 +14,14 @@ import { withBase } from '../lib/paths';
 	eyebrow={`${SITE.version} · OPEN SOURCE`}
 	description="Black-box security for Soroban."
 >
-	<p>
-		Kuyfi analyzes deployed Soroban contracts from their on-chain interface, so you
-		can inspect their attack surface, exercise inputs and review execution traces
-		without requiring the source code.
-	</p>
+	<div class="hero">
+		<KeyholeGlow />
+		<p class="hero__copy">
+			Kuyfi analyzes deployed Soroban contracts from their on-chain interface, so you
+			can inspect their attack surface, exercise inputs and review execution traces
+			without requiring the source code.
+		</p>
+	</div>
 
 	<InstallBar />
 
@@ -28,7 +32,6 @@ import { withBase } from '../lib/paths';
 		<a class="btn btn--ghost" href={withBase('/quickstart')}>QUICKSTART</a>
 		<McpButton variant="hero" href={withBase('/mcp')} />
 	</div>
-
 	<Callout type="tip" title="What Kuyfi is">
 		<p>
 			An automated <strong>black-box</strong> security terminal for Soroban. It is the
@@ -110,11 +113,45 @@ import { withBase } from '../lib/paths';
 				<td><a href={withBase('/mcp')}>MCP</a></td>
 				<td>Future Model Context Protocol hook + Connect button</td>
 			</tr>
+			<tr>
+				<td><a href={withBase('/report-schema')}>Report schema</a></td>
+				<td>SecurityReport 1.0.0 field map + copyable sample JSON</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/vectors')}>Attack vectors</a></td>
+				<td>Full Chaos Monkey vector catalog + admin patterns</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/glossary')}>Glossary</a></td>
+				<td>Soroban + Kuyfi vocabulary</td>
+			</tr>
+			<tr>
+				<td><a href={withBase('/troubleshooting')}>Troubleshooting</a></td>
+				<td>ScanError codes, PowerShell, empty findings</td>
+			</tr>
 		</tbody>
 	</table>
+
+	<p class="search-hint">
+		Press <kbd>⌘K</kbd> or <kbd>/</kbd> for intelligent search (fuzzy, EN/ES synonyms, section
+		deep-links).
+	</p>
 </DocsLayout>
 
 <style>
+	.hero {
+		position: relative;
+		padding-right: min(200px, 28vw);
+		margin-bottom: 0.5rem;
+	}
+
+	.hero__copy {
+		margin: 0 0 1rem;
+		font-size: 1.05rem;
+		color: var(--text-muted);
+		max-width: 36rem;
+	}
+
 	.cta-row {
 		display: flex;
 		flex-wrap: wrap;
@@ -150,5 +187,20 @@ import { withBase } from '../lib/paths';
 
 	strong {
 		color: var(--text);
+	}
+
+	.search-hint {
+		margin-top: 1.5rem;
+		font-size: 0.9rem;
+		color: var(--text-dim);
+	}
+
+	.search-hint kbd {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		padding: 0.1rem 0.35rem;
+		border: 1px solid var(--border-strong);
+		border-radius: 4px;
+		color: var(--yellow);
 	}
 </style>

@@ -1,0 +1,290 @@
+import {NAV} from './nav';
+
+export type SearchEntry = {
+	id: string;
+	title: string;
+	href: string;
+	/** Optional hash for in-page sections, e.g. #taxonomy */
+	hash?: string;
+	group: string;
+	blurb: string;
+	/** Free-text body mined for matching + snippets */
+	body: string;
+	keywords: string[];
+	/** Weight boost: page=1, section=0.85, alias-heavy concepts higher via keywords */
+	weight?: number;
+};
+
+/** Query synonyms → canonical tokens (EN + common ES). */
+export const SYNONYMS: Record<string, string[]> = {
+	fuzz: ['chaos', 'monkey', 'vector', 'fuzzer'],
+	fuzzing: ['chaos', 'monkey', 'vector'],
+	informe: ['report', 'securityreport', 'pdf', 'json'],
+	reporte: ['report', 'json', 'pdf'],
+	senal: ['signal', 'finding', 'potential_vuln'],
+	señal: ['signal', 'finding'],
+	vulnerabilidad: ['potential_vuln', 'finding', 'security'],
+	instalar: ['install', 'npm', 'setup'],
+	instalacion: ['install', 'npm'],
+	auditoria: ['audit', 'black-box', 'security'],
+	auditoría: ['audit', 'black-box'],
+	contrato: ['contract', 'soroban', 'wasm'],
+	red: ['network', 'testnet', 'rpc'],
+	pago: ['paid', 'x402', 'scan', 'api'],
+	buscar: ['search'],
+	auth: ['authorization', 'access', 'unauthorized_call', 'require_auth'],
+	authorization: ['access', 'admin', 'unauthorized_call'],
+	bps: ['fee', 'basis', 'fuzzer_fee'],
+	amm: ['liquidity', 'swap', 'reserve'],
+	cli: ['headless', 'command', 'kuyfi'],
+	tui: ['terminal', 'ink', 'interactive'],
+	mcp: ['model', 'context', 'protocol', 'agent'],
+	llm: ['agent', 'llms.txt', 'cursor', 'prompt'],
+	schema: ['securityreport', 'json', 'schemaversion'],
+	panic: ['uncontrolled_panic', 'trap', 'arith'],
+	timeout: ['polling', 'low'],
+	friendbot: ['keypair', 'ephemeral', 'fund'],
+	xdr: ['contractspec', 'scspec', 'types'],
+	udt: ['struct', 'enum', 'union', 'composite'],
+};
+
+export const SUGGESTIONS = [
+	{label: 'POTENTIAL_VULN', q: 'POTENTIAL_VULN'},
+	{label: 'Chaos Monkey vectors', q: 'vector families'},
+	{label: 'Install npm', q: 'npm install'},
+	{label: 'SecurityReport JSON', q: 'schemaVersion'},
+	{label: 'Paid scan API', q: 'x402'},
+	{label: 'MCP Connect', q: 'mcp'},
+	{label: 'Testnet only', q: 'testnet'},
+	{label: 'UNAUTHORIZED_CALL', q: 'UNAUTHORIZED_CALL'},
+];
+
+export const SEARCH_INDEX: SearchEntry[] = [
+	{
+		id: 'overview',
+		title: 'Overview',
+		href: '/',
+		group: 'Start',
+		blurb: 'Black-box security for Soroban — Before the Breach.',
+		body: 'Kuyfi analyzes deployed Soroban contracts from on-chain interface attack surface Chaos Monkey execution traces no source code OSINT open source v0.1.0',
+		keywords: ['kuyfi', 'black-box', 'soroban', 'before the breach', 'stellar', 'overview', 'home'],
+		weight: 1.2,
+	},
+	{
+		id: 'install',
+		title: 'Installation',
+		href: '/installation',
+		group: 'Start',
+		blurb: 'Global npm install, Windows PowerShell, from-source build.',
+		body: 'npm install -g @kuyfi/kuyfi node 20 windows powershell kuyfi.cmd execution policy from source npm ci build start kuyfi-server env PAY_TO',
+		keywords: ['npm', 'install', 'windows', 'powershell', 'node', 'global', 'setup', 'instalar'],
+	},
+	{
+		id: 'quickstart',
+		title: 'Quickstart',
+		href: '/quickstart',
+		group: 'Start',
+		blurb: 'Contract ID → TUI or headless report in minutes.',
+		body: 'first run contract id C55 characters interactive menu headless --json --pdf authorization required',
+		keywords: ['quickstart', 'first run', 'ci', 'tutorial', 'empezar'],
+	},
+	{
+		id: 'pipeline',
+		title: 'Pipeline',
+		href: '/pipeline',
+		group: 'Core',
+		blurb: 'Contract ID → WASM → attack surface → vectors → report.',
+		body: 'OSINT scanner reconstruct chaos monkey simulate classify JSON PDF execution evidence six steps',
+		keywords: ['pipeline', 'flow', 'architecture flow', 'end to end'],
+	},
+	{
+		id: 'osint',
+		title: 'OSINT Scanner',
+		href: '/osint-scanner',
+		group: 'Core',
+		blurb: 'Read-only WASM fetch and contractspecv0 attack-surface map.',
+		body: 'getContractWasmByContractId contractspecv0 ScSpecEntry UDT registry ScanResult ScanError CONTRACT_NOT_FOUND XDR_ALIGN_FAILURE RPC_UNAVAILABLE alignment tolerant parse',
+		keywords: ['scanner', 'osint', 'wasm', 'contractspec', 'udt', 'rpc', 'recon'],
+	},
+	{
+		id: 'chaos',
+		title: 'Chaos Monkey',
+		href: '/chaos-monkey',
+		group: 'Core',
+		blurb: 'Type-aware fuzzing: simulate first, broadcast when preflight passes.',
+		body: 'ephemeral Friendbot keypair math boundary access control call order fee BPS liquidity ratio one variable at a time type-correct not semantically valid invokeContract router',
+		keywords: ['chaos', 'monkey', 'fuzz', 'fuzzer', 'friendbot', 'preflight', 'vector'],
+		weight: 1.15,
+	},
+	{
+		id: 'vectors',
+		title: 'Attack vectors reference',
+		href: '/vectors',
+		group: 'Core',
+		blurb: 'Complete catalog of vector families, names, and admin patterns.',
+		body: 'UNAUTHORIZED_CALL REINIT_ATTACK SELF_CALL_ATTACK UNAUTHORIZED_ADDR_CALL MAX_I128 ZERO BPS EMPTY_VEC REINIT_SEQUENCE pause initialize set_admin upgrade liquidity ZERO_A_MAX_B',
+		keywords: ['vectors', 'catalog', 'UNAUTHORIZED_CALL', 'MAX_I128', 'BPS', 'admin patterns', 'familias'],
+		weight: 1.1,
+	},
+	{
+		id: 'findings',
+		title: 'Findings & signals',
+		href: '/findings',
+		group: 'Core',
+		blurb: 'Six-signal taxonomy and severity rules.',
+		body: 'SECURE PRECONDITION_FAIL UNEXPECTED_ERROR POTENTIAL_VULN UNCONTROLLED_PANIC TIMEOUT CRITICAL HIGH MEDIUM LOW KYF DiagnosticEvent',
+		keywords: ['finding', 'signal', 'severity', 'POTENTIAL_VULN', 'SECURE', 'taxonomy', 'señal'],
+		weight: 1.15,
+	},
+	{
+		id: 'findings-taxonomy',
+		title: 'Signal taxonomy',
+		href: '/findings',
+		hash: 'taxonomy',
+		group: 'Core',
+		blurb: 'SECURE · PRECONDITION_FAIL · UNEXPECTED_ERROR · POTENTIAL_VULN · …',
+		body: 'table of signals meanings filtered from findings list',
+		keywords: ['taxonomy', 'SECURE', 'PRECONDITION_FAIL', 'UNEXPECTED_ERROR'],
+		weight: 0.9,
+	},
+	{
+		id: 'findings-examples',
+		title: 'Finding worked examples',
+		href: '/findings',
+		hash: 'examples',
+		group: 'Core',
+		blurb: 'How common Chaos Monkey outcomes map to signals.',
+		body: 'set_admin require_auth broken access control MAX_I128 root trap',
+		keywords: ['examples', 'examples', 'worked', 'broken access'],
+		weight: 0.9,
+	},
+	{
+		id: 'reports',
+		title: 'Reports',
+		href: '/reports',
+		group: 'Core',
+		blurb: 'JSON/PDF exports and on-chain execution evidence.',
+		body: 'SecurityReport verificationTransactions stellar.expert ledger hash TUI J P B flags --json --pdf',
+		keywords: ['report', 'pdf', 'json', 'evidence', 'export', 'informe'],
+	},
+	{
+		id: 'schema',
+		title: 'Report schema',
+		href: '/report-schema',
+		group: 'Core',
+		blurb: 'SecurityReport 1.0.0 field map and sample JSON.',
+		body: 'schemaVersion reportId tool target scan execution summary findings PublicFinding evidence trace',
+		keywords: ['schema', 'schemaVersion', '1.0.0', 'typescript', 'json sample'],
+		weight: 1.1,
+	},
+	{
+		id: 'cli',
+		title: 'CLI reference',
+		href: '/cli',
+		group: 'Reference',
+		blurb: 'kuyfi / kuyfi-server modes and flags.',
+		body: 'meow selectCliMode tui headless invalid Contract ID regex C[A-Z0-9]{55} dist/cli.js',
+		keywords: ['cli', 'flags', 'headless', 'command', 'kuyfi-server'],
+	},
+	{
+		id: 'tui',
+		title: 'Interactive TUI',
+		href: '/tui',
+		group: 'Reference',
+		blurb: 'Ink menu: Scanner, Chaos Monkey, Logs, About.',
+		body: 'Ink React ViewShell layout large compact tooSmall useTerminalSize export keys',
+		keywords: ['tui', 'ink', 'terminal', 'menu', 'ui'],
+	},
+	{
+		id: 'paid',
+		title: 'Paid scan API',
+		href: '/paid-api',
+		group: 'Reference',
+		blurb: 'x402 Local402 paid OSINT endpoint — scanner only.',
+		body: 'GET /scan PAY_TO PRICE CLP NETWORK facilitator PORT 4021 402 Payment Required Reflector USDC',
+		keywords: ['x402', 'paid', 'api', 'local402', '402', 'clp', 'http'],
+	},
+	{
+		id: 'architecture',
+		title: 'Architecture',
+		href: '/architecture',
+		group: 'Reference',
+		blurb: 'UI vs audit engine module map.',
+		body: 'scanner chaos_monkey security_report report_export cli_runtime network.ts source/modules screens components',
+		keywords: ['architecture', 'modules', 'engine', 'typescript', 'design'],
+	},
+	{
+		id: 'changelog',
+		title: 'Changelog',
+		href: '/changelog',
+		group: 'Reference',
+		blurb: '0.1.0 and unreleased notes.',
+		body: 'release 0.1.0 unreleased kuyfi-server rename kuyfi_tui',
+		keywords: ['changelog', 'release', 'version', 'history'],
+	},
+	{
+		id: 'glossary',
+		title: 'Glossary',
+		href: '/glossary',
+		group: 'Reference',
+		blurb: 'Soroban + Kuyfi terms in one place.',
+		body: 'Contract ID WASM Soroban Friendbot ScVal DiagnosticEvent UDT black-box Testnet SecurityReport',
+		keywords: ['glossary', 'dictionary', 'terms', 'definitions', 'glosario'],
+	},
+	{
+		id: 'troubleshooting',
+		title: 'Troubleshooting',
+		href: '/troubleshooting',
+		group: 'Reference',
+		blurb: 'Common errors: RPC, PowerShell, empty findings, timeouts.',
+		body: 'CONTRACT_NOT_FOUND RPC_UNAVAILABLE powershell execution policy Friendbot fail empty findings PRECONDITION noise',
+		keywords: ['troubleshoot', 'error', 'debug', 'fix', 'ayuda', 'problems'],
+	},
+	{
+		id: 'llms',
+		title: 'For LLMs',
+		href: '/for-llms',
+		group: 'Agents & MCP',
+		blurb: 'llms.txt playbook and safe agent rules.',
+		body: 'llms-full.txt prompt stub agent playbook cursor do not invent mainnet',
+		keywords: ['llm', 'agent', 'cursor', 'prompt', 'llms.txt', 'ai'],
+	},
+	{
+		id: 'mcp',
+		title: 'MCP',
+		href: '/mcp',
+		group: 'Agents & MCP',
+		blurb: 'MCP Connect stub — @kuyfi/mcp not published yet.',
+		body: 'Model Context Protocol connect button draft config kuyfi_scan kuyfi_audit',
+		keywords: ['mcp', 'connect', 'protocol', 'soon'],
+	},
+	{
+		id: 'policy',
+		title: 'Responsible use',
+		href: '/responsible-use',
+		group: 'Policy',
+		blurb: 'Authorization required. Testnet only. No certification claims.',
+		body: 'legal authorization written consent disclosure MIT not affiliated SDF',
+		keywords: ['policy', 'legal', 'responsible', 'ethics', 'authorization'],
+	},
+	{
+		id: 'faq',
+		title: 'FAQ',
+		href: '/faq',
+		group: 'Policy',
+		blurb: 'Auditor? Mainnet? Source needed? API Chaos Monkey?',
+		body: 'is kuyfi an auditor mainnet source code wallet drain precondition faq',
+		keywords: ['faq', 'questions', 'help', 'preguntas'],
+	},
+];
+
+export function assertSearchCoversNav(): void {
+	const hrefs = new Set(SEARCH_INDEX.map((e) => e.href));
+	for (const group of NAV) {
+		for (const item of group.items) {
+			if (!hrefs.has(item.href)) {
+				console.warn(`[docs-search] missing index entry for ${item.href}`);
+			}
+		}
+	}
+}

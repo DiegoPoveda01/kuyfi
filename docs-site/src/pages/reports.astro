@@ -1,6 +1,7 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
 import Callout from '../components/Callout.astro';
+import { withBase } from '../lib/paths';
 ---
 
 <DocsLayout
@@ -11,7 +12,8 @@ import Callout from '../components/Callout.astro';
 	<h2>SecurityReport</h2>
 	<p>
 		Canonical schema <code>schemaVersion: "1.0.0"</code>. Built from an
-		<code>AuditRun</code> (scan + ChaosReport) by <code>security_report.ts</code>.
+		<code>AuditRun</code> (scan + ChaosReport) by <code>security_report.ts</code>. Full field
+		map and sample JSON → <a href={withBase('/report-schema')}>Report schema</a>.
 	</p>
 
 	<ul>
